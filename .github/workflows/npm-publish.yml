@@ -6,6 +6,10 @@ name: Node.js Package
 on:
   release:
     types: [created]
+    
+permissions:
+  contents: read
+  id-token: write 
 
 jobs:
   build:
