@@ -20,7 +20,7 @@ export interface EmailProviderFields {
   attachments?: Attachment[];
 }
 
-export async function emailProvider({
+export default async function mailprovider({
   displayName,
   email,
   subject,
