@@ -8,11 +8,15 @@ Easily send emails with minimal setup, leveraging free SMTP options and scalable
 ## 🚀 Installation
 
 ```bash
-npm install mail-provider
+npm install mailprovider
 ```
 
 ```bash
- const response = await emailProvider({
+import sendEmail from "mailprovider"
+```
+
+```bash
+ const response = await sendEmail({
     displayName: "no-reply",
     email: "amarbiradar147@gmail.com",
     subject: "Welcome to Mail Provider 🚀",
@@ -29,7 +33,7 @@ npm install mail-provider
 ### With Attachments - (PDF/PNG/JPEG/any..)
 
 ```bash
- const response = await emailProvider({
+ const response = await sendEmail({
     displayName: "no-reply",
     email: "amarbiradar147@gmail.com",
     subject: "Welcome to Mail Provider 🚀",
