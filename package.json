@@ -1,17 +1,29 @@
 {
   "name": "mailprovider",
-  "version": "1.1.1",
+  "version": "2.1.0",
   "description": "A simple TypeScript email provider wrapper using Nodemailer.",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
   "type": "module",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    }
+  },
   "files": [
     "dist"
   ],
   "scripts": {
-    "dev": "ts-node src/index.ts",
-    "build": "tsc",
-    "start": "node dist/index.js",
+    "dev": "tsx src/index.ts",
+    "build": "npm run clean && npm run build:esm && npm run build:cjs && npm run build:types",
+    "build:esm": "tsc -p tsconfig.esm.json && node -e \"fs.writeFileSync('dist/esm/package.json', JSON.stringify({type:'module'},null,2))\"",
+    "build:cjs": "tsc -p tsconfig.cjs.json && node -e \"fs.writeFileSync('dist/cjs/package.json', JSON.stringify({type:'commonjs'},null,2))\"",
+    "build:types": "tsc -p tsconfig.types.json",
+    "clean": "node -e \"fs.rmSync('dist', { recursive: true, force: true })\"",
+    "start": "node dist/esm/index.js",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write .",
     "prepublishOnly": "npm run build"
@@ -26,15 +38,15 @@
   "author": "Your Name <your.email@example.com>",
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "^24.3.0",
-    "@types/nodemailer": "^7.0.1",
+    "@types/node": "^24.13.3",
+    "@types/nodemailer": "^7.0.12",
     "eslint": "^9.34.0",
     "prettier": "^3.6.2",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.9.2"
+    "tsx": "^4.23.13",
+    "typescript": "^5.9.3"
   },
   "dependencies": {
-    "nodemailer": "^7.0.5"
+    "nodemailer": "^7.0.13"
   },
   "publishConfig": {
     "access": "public"

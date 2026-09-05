@@ -1,9 +1,7 @@
+import path from "node:path";
 import { transporter } from "./utils/mailer.js";
-import path from "path";
-import { fileURLToPath } from "url";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+export { transporter };
 
 export interface Attachment {
   filename: string;
@@ -13,7 +11,7 @@ export interface Attachment {
 }
 
 export interface EmailProviderFields {
-  displayName: string;
+  displayName?: string;
   email: string;
   subject: string;
   htmlContent: string;
@@ -28,16 +26,19 @@ export async function emailProvider({
   attachments = [],
 }: EmailProviderFields) {
   try {
-    // inside emailProvider
     const resolvedAttachments = attachments.map((att) => ({
       ...att,
       path: path.isAbsolute(att.path)
         ? att.path
-        : path.resolve(process.cwd(), att.path), // ✅ relative to project root
+        : path.resolve(process.cwd(), att.path),
     }));
 
+    const fromAddress = displayName
+      ? `"${displayName}" <otp.providers@gmail.com>`
+      : "otp.providers@gmail.com";
+
     const info = await transporter.sendMail({
-      from: `"${displayName}" <otp.providers@gmail.com>`, // Better formatting
+      from: fromAddress,
       to: email,
       subject,
       html: htmlContent,
@@ -51,3 +52,5 @@ export async function emailProvider({
     throw error;
   }
 }
+
+export default emailProvider;
